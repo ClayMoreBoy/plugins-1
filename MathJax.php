@@ -1,19 +1,14 @@
 <?php
 /**
- * GitHub git 同步文章
+ * MathJax
  * 
- * @package GitHub Git Transmit
- * @author weakish
- * @version 0.0.1
- * @dependence 10.6.24-*
- * @link http://typecho.org
+ * @package MathJax
+ * @author mutoo
+ * @version 1.0.0
+ * @link http://blog.mutoo.im/mathjax-plugin.html
  */
-class GitHubGit_Plugin implements Typecho_Plugin_Interface
+class MathJax implements Typecho_Plugin_Interface
 {
-    // Use your own random code.
-    // Keep your code secret!
-    // Anyone knowing the code can post articles on your blog!
-    const github_git = 'curtseyingpiddlesMiguelyeshivahsclarinettists';
     /**
      * 激活插件方法,如果激活失败,直接抛出异常
      * 
@@ -23,12 +18,7 @@ class GitHubGit_Plugin implements Typecho_Plugin_Interface
      */
     public static function activate()
     {
-        if (false == Typecho_Http_Client::get()) {
-            throw new Typecho_Plugin_Exception(_t('对不起, 您的主机不支持 php-curl 扩展而且没有打开 allow_url_fopen 功能, 无法正常使用此功能'));
-        }
-    
-        Helper::addAction(github_git, 'GitHubGit_Action');
-        return _t('安装成功') . $error;
+        Typecho_Plugin::factory('Widget_Archive')->footer = array('MathJax', 'footer');
     }
     
     /**
@@ -40,9 +30,7 @@ class GitHubGit_Plugin implements Typecho_Plugin_Interface
      * @throws Typecho_Plugin_Exception
      */
     public static function deactivate()
-    {
-        Helper::removeAction(github_git);
-    }
+    {}
     
     /**
      * 获取插件配置面板
@@ -61,5 +49,15 @@ class GitHubGit_Plugin implements Typecho_Plugin_Interface
      * @return void
      */
     public static function personalConfig(Typecho_Widget_Helper_Form $form){}
+    
+    /**
+     * 输出尾部js
+     * 
+     * @access public
+     * @param unknown $footer
+     * @return unknown
+     */
+    public static function footer() {
+        echo '<script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [[\'$\',\'$\'], [\'\\\\(\',\'\\\\)\']]}});</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>';
+    }
 }
-
